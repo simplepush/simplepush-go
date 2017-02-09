@@ -1,5 +1,0 @@
-FROM scratch
-MAINTAINER Roland Kammerer <dev.rck@gmail.com>
-
-ADD alpine-simplepush /usr/local/bin/simplepush
-ENTRYPOINT ["simplepush"]
