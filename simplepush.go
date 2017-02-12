@@ -77,7 +77,6 @@ func Send(m Message) error {
 		salt := defaultSalt
 		if m.Salt != "" {
 			salt = m.Salt
-
 		}
 		sha := sha1.Sum([]byte(m.Password + salt))
 		key, _ := hex.DecodeString(fmt.Sprintf("%X", sha)[:32])
@@ -87,9 +86,12 @@ func Send(m Message) error {
 			return err
 		}
 
-		if title, err = encrypt(key, iv, []byte(title)); err != nil {
-			return err
+		if title != "" {
+			if title, err = encrypt(key, iv, []byte(title)); err != nil {
+				return err
+			}
 		}
+
 		if message, err = encrypt(key, iv, []byte(message)); err != nil {
 			return err
 		}
@@ -97,7 +99,9 @@ func Send(m Message) error {
 
 	data := url.Values{}
 	data.Set("key", m.SimplePushKey)
-	data.Add("title", title)
+	if title != "" {
+		data.Add("title", title)
+	}
 	data.Add("msg", message)
 	data.Add("event", m.Event)
 	if m.Encrypt {
