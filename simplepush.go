@@ -7,7 +7,6 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha1"
-	"crypto/tls"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
@@ -117,11 +116,7 @@ func Send(m Message) error {
 	u.Path = resource
 	urlStr := fmt.Sprintf("%v", u)
 
-	// actually the certificate looks OK, but it was not possible to send messages without this config :-/
-	transCfg := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // ignore expired SSL certificates
-	}
-	client := &http.Client{Transport: transCfg}
+	client := &http.Client{}
 
 	resp, err := client.PostForm(urlStr, data)
 	if err != nil {
