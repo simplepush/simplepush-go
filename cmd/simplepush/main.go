@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/rck/simplepush"
+	"github.com/simplepush/simplepush-go"
 )
 
 var (
