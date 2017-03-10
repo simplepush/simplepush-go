@@ -7,6 +7,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha1"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
@@ -15,6 +16,12 @@ import (
 	"net/http"
 	"net/url"
 )
+
+func init() {
+	// Disable HTTP/2 support- see the package overview in net/http docs
+	tr, _ := http.DefaultTransport.(*http.Transport)
+	tr.TLSNextProto = make(map[string]func(authority string, c *tls.Conn) http.RoundTripper)
+}
 
 // Message contains all the information necessary to send a, potentially encrypted, message.
 type Message struct {
